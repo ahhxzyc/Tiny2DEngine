@@ -7,7 +7,7 @@ public:
     MyApp(HINSTANCE hinst, int w, int h) : Tiny2DEngine(hinst, w, h) {}
 
     // Optional: Rewrite onMain function, which will get executed in the loop
-    void onMain() override {setPixel(100, 100, Vector3f(1,1,1));}
+    void onMain() override {drawPoint(100, 100, 2, Vector3f(1,1,1));}
 };
 
 // Main function for Win32 Application

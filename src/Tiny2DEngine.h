@@ -16,6 +16,7 @@ public:
     void paint();
     void mainloop();
     inline void setPixel(int x, int y, const Vector3f &color);
+    inline void drawPoint(int x, int y, int sz, const Vector3f &color);
     inline void clear();
     
     int width() const       {return mWidth;}
@@ -61,14 +62,24 @@ protected:
 
 
 void Tiny2DEngine::setPixel(int x, int y, const Vector3f &color) {
-    if (x < 0 || x >= mWidth || y < 0 || y >= mHeight) {
+    if (x < 0 || x >= mWidth || y < 0 || y >= mHeight)
         return ;
-    }
     BYTE *base = mFrameBuffer + (x + y * mWidth) * 3;
     // Windows somehow have the order of RGB's reversed in the frame buffer
     base[0] = static_cast<BYTE>(color[2] * 255);
     base[1] = static_cast<BYTE>(color[1] * 255);
     base[2] = static_cast<BYTE>(color[0] * 255);
+}
+
+void Tiny2DEngine::drawPoint(int x, int y, int sz, const Vector3f &color) {
+    if (sz < 1)
+        return;
+    int offset = (sz - 1) / 2;
+    x -= offset;
+    y -= offset;
+    for (int i = 0; i < sz; i ++ )
+        for (int j = 0; j < sz; j ++ )
+            setPixel(x + i, y + j, color);
 }
 
 void Tiny2DEngine::clear() {
