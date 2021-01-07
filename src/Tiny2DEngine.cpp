@@ -9,7 +9,9 @@ LRESULT CALLBACK Tiny2DEngine::win_procedure(HWND hwnd, UINT message, WPARAM wPa
 	switch (message) {
 		case WM_PAINT: {
 			if (pwnd) {
-				pwnd->paint();
+				pwnd->render();
+				pwnd->updateWindowInfo();
+				pwnd->updateWindowTitle();
 			}
 			return 0;
 		}
@@ -94,13 +96,20 @@ void Tiny2DEngine::init() {
 	onInit();
 }
 
-void Tiny2DEngine::paint() {
+
+void Tiny2DEngine::render() {
 	PAINTSTRUCT ps;
 	BeginPaint (m_hWnd, &ps);
 	onMain();
 	BitBlt(m_hDC, 0, 0, mWidth, mHeight, m_hBufferDC, 0, 0, SRCCOPY);
-	EndPaint (m_hWnd, &ps) ;
-	// calculate average fps of last 100 frames
+	EndPaint (m_hWnd, &ps);
+}
+
+
+//
+// Calculate average fps of last 100 frames
+//
+float Tiny2DEngine::findFps() {
 	mCurTime = clock();
 	float fps = -1.f;
 	if (mLastTime) {
@@ -114,13 +123,21 @@ void Tiny2DEngine::paint() {
 		}
 	}
 	mLastTime = mCurTime;
-	// Get cursor position & window rect
+	return fps;
+}
+
+//
+// Get cursor position & window rect
+//
+void Tiny2DEngine::updateWindowInfo() {
 	GetCursorPos(&mMousePos);
 	GetWindowRect(m_hWnd, &m_wndrect);
 	clamp_cursor_pos();
-	// change title
+}
+
+void Tiny2DEngine::updateWindowTitle() {
 	char title[50];
-	sprintf(title, "average fps: %.2f, cursor: %d,%d", fps, mMousePos.x, mMousePos.y);
+	sprintf(title, "average fps: %.2f, cursor: %d,%d", findFps(), mMousePos.x, mMousePos.y);
 	SetWindowText(m_hWnd, TEXT(title));
 }
 

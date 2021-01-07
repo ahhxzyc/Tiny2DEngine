@@ -13,14 +13,10 @@ public:
     Tiny2DEngine(HINSTANCE hinst, int w, int h);
     
     void init();
-    void paint();
     void mainloop();
     inline void setPixel(int x, int y, const Vector3f &color);
     inline void drawPoint(int x, int y, int sz, const Vector3f &color);
     inline void clear();
-    
-    int width() const       {return mWidth;}
-    int height() const      {return mHeight;}
     
     virtual void onInit()               {}
     virtual void onMain()               {}
@@ -33,6 +29,10 @@ public:
     static LRESULT CALLBACK win_procedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 private:
     inline void clamp_cursor_pos();
+    void render();
+    float findFps();
+    void updateWindowInfo();
+    void updateWindowTitle();
 
 private:
     int             mWidth;
