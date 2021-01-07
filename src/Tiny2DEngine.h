@@ -9,9 +9,9 @@ using Eigen::Vector3f;
 
 class Tiny2DEngine {
 public:
-    // ctor
+    
     Tiny2DEngine(HINSTANCE hinst, int w, int h);
-    // API's
+    
     void init();
     void paint();
     void mainloop();
@@ -60,7 +60,9 @@ protected:
     bool                m_bCursorInWindow;
 };
 
-
+//
+// Set the color of a pixel
+//
 void Tiny2DEngine::setPixel(int x, int y, const Vector3f &color) {
     if (x < 0 || x >= mWidth || y < 0 || y >= mHeight)
         return ;
@@ -71,6 +73,9 @@ void Tiny2DEngine::setPixel(int x, int y, const Vector3f &color) {
     base[2] = static_cast<BYTE>(color[0] * 255);
 }
 
+//
+// Draw a point of a certain size
+//
 void Tiny2DEngine::drawPoint(int x, int y, int sz, const Vector3f &color) {
     if (sz < 1)
         return;
@@ -82,10 +87,17 @@ void Tiny2DEngine::drawPoint(int x, int y, int sz, const Vector3f &color) {
             setPixel(x + i, y + j, color);
 }
 
+//
+// Clear screen to complete darkness
+//
 void Tiny2DEngine::clear() {
     memset(mFrameBuffer, 255, mWidth * mHeight * 3);
 }
 
+//
+// Clamp cursor position to screen coordinates, i.e., x in [0,width) and y in [0,height)
+// TODO: there's a bug to fix
+//
 void Tiny2DEngine::clamp_cursor_pos() {
     mMousePos.x = min(max(mMousePos.x, m_wndrect.left), m_wndrect.right) - m_wndrect.left;
     mMousePos.y = min(max(mMousePos.y, m_wndrect.top), m_wndrect.bottom) - m_wndrect.top;

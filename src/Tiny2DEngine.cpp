@@ -74,7 +74,9 @@ Tiny2DEngine::Tiny2DEngine(HINSTANCE hinst, int w, int h) :
 	SetWindowLongPtr(m_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 }
 
-// Initialize frame buffer
+//
+// Initialize frame buffer of the engine
+//
 void Tiny2DEngine::init() {
 	// Create bitmap and a DC that uses this bitmap
 	// They are used as frame buffer
@@ -122,6 +124,11 @@ void Tiny2DEngine::paint() {
 	SetWindowText(m_hWnd, TEXT(title));
 }
 
+//
+// Enter the loop where:
+// 1. windows messages are handled
+// 2. rendering happens
+//
 void Tiny2DEngine::mainloop() {
     MSG msg;
 	while (1) {
