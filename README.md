@@ -1,4 +1,4 @@
-# Win2DEngine
+# Tiny2DEngine
 
 ## Intro
 
