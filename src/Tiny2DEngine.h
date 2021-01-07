@@ -21,24 +21,20 @@ public:
     
     int width() const       {return mWidth;}
     int height() const      {return mHeight;}
-
-public:
-    // virtual functions
+    
     virtual void onInit()               {}
     virtual void onMain()               {}
     virtual void onDestroy()            {}
     virtual void onMousePressed()       {}
     virtual void onMouseReleased()      {}
 
-/////////////////////////////////////////////////////
-// Dirty parts
-/////////////////////////////////////////////////////
+
 public:
     static LRESULT CALLBACK win_procedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 private:
     inline void clamp_cursor_pos();
 
-protected:
+private:
     int             mWidth;
     int             mHeight;
     // basic info about the window
@@ -74,7 +70,7 @@ void Tiny2DEngine::setPixel(int x, int y, const Vector3f &color) {
 }
 
 //
-// Draw a point of a certain size
+// Draw point of a certain size
 //
 void Tiny2DEngine::drawPoint(int x, int y, int sz, const Vector3f &color) {
     if (sz < 1)
