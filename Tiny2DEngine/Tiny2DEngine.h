@@ -1,6 +1,8 @@
 #pragma once
 
 #include "windows.h"
+#include "Trackball.h"
+#include "Transform.h"
 #include <ctime>
 #include <queue>
 #include <algorithm>
@@ -23,17 +25,25 @@ public:
     
     void init();
     void mainloop();
+
+    // Drawing API's
+
     inline void setPixel(int x, int y, const Vector3f &color);
     inline void drawPoint(int x, int y, int sz, const Vector3f &color);
     void drawTriangle(const Triangle3D &tri, const Vector3f &color);
     void drawTriangle(const Triangle3D &tri);
     inline void clear();
+
+    void onMousePressed();
+    void onMouseReleased();
     
+    // User-defined behaviors
+
     virtual void onInit()               {}
     virtual void onMain()               {}
     virtual void onDestroy()            {}
-    virtual void onMousePressed()       {}
-    virtual void onMouseReleased()      {}
+    virtual void onUserMousePressed()   {}
+    virtual void onUserMouseReleased()  {}
 
 
 public:
@@ -44,6 +54,7 @@ private:
     float findFps();
     void updateWindowInfo();
     void updateWindowTitle();
+    void updateTrackball();
     inline Vector4f to_vec4f(Vector3f v, float f);
     inline Vector2f to_vec2f(Vector4f v);
     inline void clearZBuffer();
@@ -73,6 +84,10 @@ private:
     Matrix4f            mModel;
     // zbuffer
     float*              m_pZBuffer;
+    // trackball
+    Trackball           mTrackball;
+    Transform           mTransform;
+    bool                m_bMousePressed = false;
 };
 
 //
@@ -103,7 +118,7 @@ void Tiny2DEngine::drawPoint(int x, int y, int sz, const Vector3f &color) {
 }
 
 //
-// Clear screen to complete darkness
+// Clear screen to complete brightness
 //
 void Tiny2DEngine::clear() {
     memset(mFrameBuffer, 255, mWidth * mHeight * 3);

@@ -13,6 +13,7 @@ LRESULT CALLBACK Tiny2DEngine::win_procedure(HWND hwnd, UINT message, WPARAM wPa
 	switch (message) {
 		case WM_PAINT: {
 			if (pwnd) {
+				pwnd->updateTrackball();
 				pwnd->render();
 				pwnd->updateWindowInfo();
 				pwnd->updateWindowTitle();
@@ -117,8 +118,10 @@ void Tiny2DEngine::render() {
 	PAINTSTRUCT ps;
 	BeginPaint (m_hWnd, &ps);
 	// start rendering
+	clear();
 	clearZBuffer();
-	mModel = Matrix4f::Identity();
+	if (m_bMousePressed)    mModel = mTransform.rotate(mTrackball.getRotation()).getMatrix();
+    else                    mModel = mTransform.getMatrix();
 	onMain();
 	// Update framebuffer
 	BitBlt(m_hDC, 0, 0, mWidth, mHeight, m_hBufferDC, 0, 0, SRCCOPY);
@@ -144,6 +147,13 @@ float Tiny2DEngine::findFps() {
 	}
 	mLastTime = mCurTime;
 	return fps;
+}
+
+
+void Tiny2DEngine::updateTrackball() {
+	float x = (float)mMousePos.x / mWidth * 2.f - 1.f;
+    float y = (float)mMousePos.y / mHeight * 2.f - 1.f;
+    mTrackball.update(x, y);
 }
 
 //
@@ -254,4 +264,17 @@ Vector3f Tiny2DEngine::barycentric(const Vector2f &p, const Triangle2D &tri) {
 	float uu = u[0] * div;
 	float vv = u[1] * div;
 	return Vector3f(1.f - uu - vv, uu, vv);
+}
+
+
+void Tiny2DEngine::onMousePressed() {
+	m_bMousePressed = true;
+	// Set starting point of the trackball
+	mTrackball.set();
+}
+
+void Tiny2DEngine::onMouseReleased() {
+	m_bMousePressed = false;
+	// Update transform to current status
+	mTransform = mTransform.rotate(mTrackball.getRotation());
 }
