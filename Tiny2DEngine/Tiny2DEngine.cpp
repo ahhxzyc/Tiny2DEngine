@@ -235,6 +235,18 @@ void Tiny2DEngine::drawTriangle(const Triangle3D &tri, const Vector3f &color) {
     }
 }
 
+
+//
+// Draw a 3D point
+//
+void Tiny2DEngine::drawPoint(const Vector3f &p, int sz, const Vector3f &color) {
+	Vector4f p4 = mModel * to_vec4f(p, 1.f);
+	Vector2f p2 = to_vec2f(p4);
+	int x = (p2[0] + 1.f) * 0.5f * mWidth;
+	int y = (p2[1] + 1.f) * 0.5f * mHeight;
+	drawPoint(x, y, sz, color);
+}
+
 //
 // This is an overload function
 // The triangle's color is by default determined by the direction it's facing

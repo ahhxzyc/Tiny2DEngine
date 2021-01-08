@@ -30,6 +30,7 @@ public:
 
     inline void setPixel(int x, int y, const Vector3f &color);
     inline void drawPoint(int x, int y, int sz, const Vector3f &color);
+    void drawPoint(const Vector3f &p, int sz, const Vector3f &color);
     void drawTriangle(const Triangle3D &tri, const Vector3f &color);
     void drawTriangle(const Triangle3D &tri);
     inline void clear();

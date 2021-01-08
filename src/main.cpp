@@ -13,6 +13,10 @@ public:
                     Vector3f(0.5,-0.5,0),
                     Vector3f(0.5,0.5,0)};
         drawTriangle(tri);
+        Vector3f red(1,0,0);
+        drawPoint(tri.a(), 5, red);
+        drawPoint(tri.b(), 5, red);
+        drawPoint(tri.c(), 5, red);
     }
 };
 
