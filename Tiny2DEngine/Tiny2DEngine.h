@@ -3,19 +3,30 @@
 #include "windows.h"
 #include <ctime>
 #include <queue>
+#include <algorithm>
 #include <Eigen/Dense>
 
 using Eigen::Vector3f;
+using Eigen::Matrix4f;
+using Eigen::Vector4f;
+using Eigen::Vector2f;
+using Eigen::Vector2i;
+
+class Triangle2D;
+class Triangle3D;
 
 class Tiny2DEngine {
 public:
     
     Tiny2DEngine(HINSTANCE hinst, int w, int h);
+    ~Tiny2DEngine();
     
     void init();
     void mainloop();
     inline void setPixel(int x, int y, const Vector3f &color);
     inline void drawPoint(int x, int y, int sz, const Vector3f &color);
+    void drawTriangle(const Triangle3D &tri, const Vector3f &color);
+    void drawTriangle(const Triangle3D &tri);
     inline void clear();
     
     virtual void onInit()               {}
@@ -33,6 +44,10 @@ private:
     float findFps();
     void updateWindowInfo();
     void updateWindowTitle();
+    inline Vector4f to_vec4f(Vector3f v, float f);
+    inline Vector2f to_vec2f(Vector4f v);
+    inline void clearZBuffer();
+    Vector3f barycentric(const Vector2f &p, const Triangle2D &tri);
 
 private:
     int             mWidth;
@@ -54,6 +69,10 @@ private:
     POINT               mMousePos;
     RECT                m_wndrect;
     bool                m_bCursorInWindow;
+    // matrix
+    Matrix4f            mModel;
+    // zbuffer
+    float*              m_pZBuffer;
 };
 
 //
@@ -99,3 +118,7 @@ void Tiny2DEngine::clamp_cursor_pos() {
     mMousePos.y = min(max(mMousePos.y, m_wndrect.top), m_wndrect.bottom) - m_wndrect.top;
     mMousePos.y = mHeight - mMousePos.y;
 }
+
+Vector4f Tiny2DEngine::to_vec4f(Vector3f v, float f)    {return Vector4f(v[0], v[1], v[2], f);}
+Vector2f Tiny2DEngine::to_vec2f(Vector4f v)             {return Vector2f(v[0], v[1]);}
+void Tiny2DEngine::clearZBuffer()                       {std::fill(m_pZBuffer, m_pZBuffer + mWidth * mHeight, -1e10);}
