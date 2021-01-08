@@ -37,7 +37,7 @@ private:
 private:
     int             mWidth;
     int             mHeight;
-    // basic info about the window
+    // windows stuff
     HINSTANCE       m_hInst;
     HWND            m_hWnd;
     HDC             m_hDC;
