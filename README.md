@@ -20,6 +20,10 @@
 
 示例：
 
+[CMakeLists示例](CMakeLists.txt)
+
+[引擎使用示例](src/main.cpp)
+
 ```cmake
 ################################# CMakeLists.txt ##################################
 cmake_minimum_required(VERSION 3.10)
